@@ -1,3 +1,69 @@
+------------------------------Customer----------------------
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Assignment1
+{
+    class Customer
+    {
+        protected string cusName;
+        protected int bal, cusID;
+        protected double roi;
+
+        public string CusName
+        {
+            set 
+            {
+                cusName = value;    
+            }
+            get 
+            {
+                return cusName;
+            }
+
+        }
+        public int CusID
+        {
+            set
+            {
+                cusID = value;
+            }
+            get
+            {
+                return cusID;
+            }
+
+        }
+        public int  Bal
+        {
+            set
+            {
+                bal = value;
+            }
+            get
+            {
+                return bal;
+            }
+
+        }
+
+        public void Display()
+        {
+            Console.WriteLine("Employee Details is \n ID \t Name \t Bal \n" + cusID +"\t"+ cusName +"\t"+bal);
+        }
+        public void Deposit(int am)
+        { 
+            bal =bal+am;
+
+        }
+    }
+}
+
+
+-------------------------------File_Operatoin---------------
 using System;
 using System.Collections.Generic;
 using System.Linq;
