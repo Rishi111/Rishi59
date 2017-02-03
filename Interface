@@ -1,0 +1,46 @@
+
+
+----------------------------------Interface-----------------------------
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConApp1
+{
+    interface ILogin
+    {
+        void ValidateData();
+        void AuthenticateUser();
+    }
+
+    interface IHomeLogin : ILogin
+    {
+        void HomeValidate();
+    }
+    class LoginCheck: ILogin,IHomeLogin
+    {
+        //Explicit inheritance
+        //void IHomeLogin.ValidateData()
+        //{ 
+        
+        //}
+        //Implicit inheritance
+        void ILogin.ValidateData()
+        { 
+        
+        }
+         void ILogin.AuthenticateUser()
+        {
+            Console.WriteLine("AuthenticateUser Method Invocked");
+        }
+        void IHomeLogin.HomeValidate()
+        { 
+        
+        }
+        //void IHomeLogin.AuthenticateUser() 
+        //{ 
+        //}
+    }
+}
