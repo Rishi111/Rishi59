@@ -1,7 +1,4 @@
 ------------------------------------------------------------File
-
-
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -169,5 +166,30 @@ namespace FileHandling
 
             Console.Read();
         }
+    }
+}
+
+---------------------------------------------------------------------------------------------------------------------------------
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace FileHandling
+{
+    [Serializable]
+    public class Emp
+    {
+        public int empid;
+        public string name;
+        [NonSerialized]
+        public int age;
+
+        //static void Main()
+        //{ 
+        
+        //}
     }
 }
