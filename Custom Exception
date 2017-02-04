@@ -1,0 +1,48 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+//using System.IO;
+using System.Runtime.Serialization;
+
+namespace CsharpExample
+{
+    class CustomException
+    {
+        static void Main()
+        {
+            try
+            { 
+                throw new UserAlreadyLogged("User is logged in");
+            }
+            catch (UserAlreadyLogged e)
+            {
+                Console.WriteLine(e.Message);
+            
+            }
+            //Console.ReadLine();
+        }
+    }
+  [Serializable]
+    public class UserAlreadyLogged : Exception
+    {
+        public UserAlreadyLogged()
+            : base()
+        { }
+
+        public UserAlreadyLogged(string message)
+            : base(message)
+        { 
+       // public string messa="Error caught";
+        }
+
+        public UserAlreadyLogged(string message,Exception innerException)
+            : base( message,innerException)
+        { }
+
+        public UserAlreadyLogged(SerializationInfo info, StreamingContext st)
+            : base(info, st)
+        { }
+
+    }
+}
