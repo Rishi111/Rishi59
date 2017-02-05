@@ -1,0 +1,40 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace CsharpExample
+{
+    class DateExample
+    {
+        static void Main()
+        {
+            Console.WriteLine("Enter date");
+            DateTime day = Convert.ToDateTime(Console.ReadLine());
+         DateTime date = new DateTime(2008,4,14);
+         Console.WriteLine(day);
+
+         //Display Date format by using this D in Format DD/MM/YYYY (sunday, feb 05 , 2017)
+         Console.WriteLine(day.ToString("D"));
+
+            //Display Date format by using this d in Format DD/MM/YYYY
+         Console.WriteLine(date.ToString("d"));
+         Console.WriteLine(date.DayOfYear);
+          DateTime sdate , edate;
+          int sy = day.Year;
+          int ey = date.Year;
+          Console.WriteLine(sy-ey);
+          int m = day.Month;
+          int d = day.Day;
+
+
+          int ss = day.CompareTo(date);
+
+           //Comparing two date , It will return integer value 1,-1
+             int ch = day.CompareTo(DateTime.Now);
+            Console.WriteLine(ss);
+            Console.WriteLine(ch);
+        }
+
+    }
+}
