@@ -1,0 +1,62 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace CsharpExample
+{
+    class List
+    {
+        static void Main()
+        {
+            List<int> numbers = new List<int>() { 1,2,3,46,7,43,22,11};
+
+            Console.WriteLine("Before sorting");
+            foreach(int i in numbers)
+            {
+                Console.WriteLine(i);
+            }
+            //Sorting
+
+            numbers.Sort();
+
+            Console.WriteLine("After sorting");
+            foreach (int i in numbers)
+            {
+                Console.WriteLine(i);
+            }
+
+
+            //Reverse
+            numbers.Reverse();
+            Console.WriteLine("reverse number ");
+            foreach (int i in numbers)
+            {
+                Console.WriteLine(i);
+            }
+
+            List<string> alphabet = new List<string>() { "r", "A", "N", "q", "b" };
+            Console.WriteLine("Alphabet");
+
+            foreach (string i in alphabet)
+            {
+                Console.WriteLine(i);
+            }
+
+            Console.WriteLine("sorted order");
+            alphabet.Sort();
+            foreach (string i in alphabet)
+            {
+                Console.WriteLine(i);
+            }
+
+            Console.WriteLine("reverse order");
+            alphabet.Reverse();
+            foreach (string i in alphabet)
+            {
+                Console.WriteLine(i);
+            }
+           
+        }
+    }
+}
