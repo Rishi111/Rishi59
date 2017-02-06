@@ -1,0 +1,57 @@
+using System.Threading.Tasks;
+using System.Runtime.Serialization;
+
+namespace ConApp1
+{
+    [Serializable]
+    [Author("Trushar")]
+    [Author("Himanshu")]
+    [Author("Rishi")]
+    class Employee
+    {   
+          public int empid;
+          [NonSerialized]
+            public string name;
+          
+            public int age;
+        
+    }
+}
+
+---------------------------------------------------------------------------------
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;  //Namespace required
+
+namespace ConApp1
+{
+    class SerilizationDemo
+    {
+        static void Main(string[] args)
+        {
+            Employee e1 = new Employee();
+            e1.name = "Rishi";
+            e1.empid = 22001;
+            e1.age = 11;
+
+            BinaryFormatter bfm = new BinaryFormatter();
+            FileStream fs = new FileStream("serialization.txt",FileMode.Create,FileAccess.Write);
+            //Serilization
+            bfm.Serialize(fs,e1);
+            fs.Close();
+
+
+            //Deserilization
+            fs = new FileStream("serialization.txt", FileMode.Open, FileAccess.Read);
+            Employee e2 = bfm.Deserialize(fs) as Employee;
+
+            fs.Close();
+           
+
+            Console.WriteLine("Emp ID \t"+e2.empid);
+            Console.WriteLine("Emp Age \t" + e2.age);
+            Console.WriteLine("Emp Name \t" + e2.name);
+
+
+        }
+    }
+}
