@@ -1,0 +1,164 @@
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+
+using System.Xml.Serialization;
+
+namespace FileHandling
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            //File f = new File();  incorrect
+
+            FileStream fs= File.Create("text1.txt");
+            StreamWriter sw = new StreamWriter(fs);
+            sw.WriteLine("This is my first line in the file");
+            sw.WriteLine("Another line of code");
+
+            sw.Close();
+
+            fs.Close();
+          
+
+            //Second option
+
+            // File.CreateText("text2.txt");
+           // sw.Write("another file...");
+            fs.Close();
+            sw.Close();
+
+            //method3
+
+            FileInfo fi = new FileInfo("text3.txt");
+            fs = fi.Create();
+
+            sw = new StreamWriter(fs);
+            sw.Write("new file added");
+
+            sw.Close();
+            fs.Close();
+
+            //method4
+
+            fi = new FileInfo("test4.txt");
+            sw = fi.CreateText();
+            sw.Write("Write a new file");
+            sw.Close();
+
+            //method5
+
+            FileStream fs1 = new FileStream("Text5.txt", FileMode.Create, FileAccess.Write);
+            sw = new StreamWriter(fs1);
+            sw.WriteLine("Welcome ");
+            sw.Close();
+            fs1.Close();
+
+            //Readin a file
+            fs=File.OpenRead("text1.txt");
+            StreamReader sr = new StreamReader(fs);
+            while (!sr.EndOfStream)
+            {
+                string s = sr.ReadLine();
+                Console.WriteLine(s);
+            }
+
+
+            //method5
+
+            fs1 = new FileStream("text1.txt", FileMode.Open, FileAccess.Read);
+            sr = new StreamReader(fs1);
+            while (!sr.EndOfStream)
+            {
+                Console.WriteLine("\n");
+                string s = sr.ReadLine();
+                Console.WriteLine(s);
+            }
+
+
+            //Binary File
+
+            fs = new FileStream("tt.dat",FileMode.Create,FileAccess.Write);
+            int i = 10;
+            float j = 19.8f;
+            string s1 = "welcome";
+
+            BinaryWriter bw = new BinaryWriter(fs);
+            bw.Write(i);
+            bw.Write(j);
+            bw.Write(s1);
+
+            bw.Close();
+            fs.Close();
+
+            fs = new FileStream("tt.dat", FileMode.Open, FileAccess.Read);
+            BinaryReader br = new BinaryReader(fs);
+            int i1= br.ReadInt32();
+
+            float j11 = br.ReadSingle();
+            string s11 = br.ReadString();
+
+            Console.WriteLine(i1);
+            Console.WriteLine(j11);
+            Console.WriteLine(s11);
+
+            br.Close();
+            fs.Close();
+
+            
+            DirectoryInfo d1=Directory.CreateDirectory("folder");
+            d1.CreateSubdirectory("folder1sub");
+
+            //StreamReader method...................
+
+            fs = fi.OpenRead();
+            string line;
+            StreamReader sr1 = new StreamReader(fs);
+            while ((line = sr1.ReadLine()) != null)
+            {
+                Console.WriteLine(line);
+            }
+            sr.Close();
+            fs.Close();
+
+
+            Emp e1 = new Emp();
+            e1.name = "Rishi";
+            e1.empid = 22001;
+            e1.age = 11;
+
+            BinaryFormatter bfm = new BinaryFormatter();
+            FileStream fsm = new FileStream("serdemo.txt",FileMode.Create,FileAccess.Write);
+            bfm.Serialize(fsm,e1);
+
+            fsm.Close();
+
+
+            //Deserizer
+
+            fsm = new FileStream("serdemo.txt", FileMode.Open, FileAccess.Read);
+            Emp e2 = bfm.Deserialize(fsm) as Emp;
+            Console.WriteLine(e2.empid);
+            Console.WriteLine(e2.age);
+            Console.WriteLine(e2.name);
+            fsm.Close();
+
+
+            //XML 
+
+            XmlSerializer xml = new XmlSerializer(typeof(Emp));
+            fsm = new FileStream("emp.xml", FileMode.Create, FileAccess.Write);
+            xml.Serialize(fsm,e1);
+            fsm.Close();
+            Console.WriteLine("+++++++++++++++++++++++++++++++++++++++");
+            fsm = new FileStream("emp.xml", FileMode.Open, FileAccess.Read);
+            e2 = xml.Deserialize(fsm) as Emp;
+            Console.WriteLine(e2.empid);
+            Console.WriteLine(e2.age);
+            Console.WriteLine(e2.name);
+            fsm.Close();
+
+            Console.Read();
+        }
+    }
+}
