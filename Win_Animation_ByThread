@@ -1,0 +1,113 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Threading;
+
+namespace AnimationUsingThread
+{
+    public partial class Form1 : Form
+    {
+        public int imgno = 1;
+        public string img;
+        public int sleeptime = 1000;
+
+        public string set;
+
+        Thread thread;
+        public Form1()
+        {
+          InitializeComponent();
+            comboBox1.Items.Add("Set1");
+            comboBox1.Items.Add("Set2");
+            button1.Enabled = false;
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+          
+            button1.Enabled = false;
+
+            button2.Enabled = true;
+            button3.Enabled = true;
+            button4.Enabled = true;
+
+            if (set == "Set1")
+            {
+                thread = new Thread(() =>
+                {
+                    for (var i = 0; i <= 2; i++)
+                    {
+                        pictureBox1.Image = Image.FromFile(i + ".jpg");
+                        Thread.Sleep(sleeptime);
+                        if (i == 2)
+                        {
+                            i = 0;
+                        }
+
+                    }
+
+                });
+                thread.Start();
+            }
+            else
+            {
+                thread = new Thread(() =>
+                {
+                    for (var i = 2; i >= 0; i--)
+                    {
+                        pictureBox1.Image = Image.FromFile(i + ".jpg");
+                        Thread.Sleep(sleeptime);
+                        if (i == 0)
+                        {
+                            i = 2;
+                        }
+
+                    }
+
+                });
+                thread.Start();
+            }
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            button2.Enabled = false;
+
+            button1.Enabled = true;
+            button3.Enabled = true;
+            button4.Enabled = true;
+
+            thread.Abort();
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+           // if(comboBox1.selecte)
+
+            button1.Enabled = true;
+           
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            sleeptime -= 200;
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            sleeptime += 200;
+        }
+    }
+}
