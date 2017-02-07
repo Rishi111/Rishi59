@@ -1,0 +1,116 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConApp1
+{
+    delegate int del(int i);
+    delegate string stringOperation(string s);
+   
+    class CS3Demo
+    {
+        static void Main(string[] args)
+        {
+            //Chair c = new Chair();
+            //c.Material = "Wooden";
+
+            Chair c = new Chair
+            {
+                Cost = 1200,
+                Material = "Plastic",
+                Height=2,
+                Width=2,
+                Length=6
+            };
+            Chair c1 = new Chair
+            {
+                Cost = 1300,
+                Material = "Wooden",
+                Height = 2,
+                Width = 2,
+                Length = 2
+            };
+
+            //Earlier
+
+            List<Chair> list = new List<Chair>();
+            list.Add(c);
+
+            //In c# 3.0 
+
+            List<Chair> clist = new List<Chair> {c,c1};
+            foreach (Chair cc in clist)
+            {
+                Console.WriteLine("Material ={0}, Cost = {1}, Height= {2}, Width= {3}, Lenght={4}",cc.Material,cc.Cost,cc.Height,cc.Width, cc.Length);
+            }
+
+            //Implicitely typed local variable
+            var i=10;
+            var  j = "fdfdf";
+
+            //Anonymous Type
+            var p = new { ID = 10, Name = "Rishi", age =22};
+
+            Console.WriteLine(p.ID +" , "+p.Name+" , "+p.age);
+
+            //Imlicitely type array
+            var aa = new[] { 10,20.30};
+            var ab = new[] { "one","two","three"};
+
+            //Extension method
+
+            Console.WriteLine("---------------Extension method--------------------");
+            Book b1 = new Book();
+            b1.bookId = 1;
+            Console.WriteLine(b1.SearchBook("CS"));			//See code
+
+            //Lambda Expression
+            Console.WriteLine("--------------Lambda Expression--------------------");
+
+            MyDel d = (x, y) => x + y+(x*y);
+            int val = d(2,3);
+            Console.WriteLine(val);
+           // string s= "Welocme";
+
+            del a = (x) => x * x;
+            int v = a(5);
+            Console.WriteLine("SQuare value = \t" + v);
+
+
+            stringOperation str = (s) => s.Substring(1, 5);
+            string va = str("Welocme");
+            Console.WriteLine(va);
+
+            //Generic delegate
+
+            Console.WriteLine("--------------Generic delegate--------------------");
+
+            Func<int> f1 = () => 10;
+            int k1 = f1();
+            Console.WriteLine(k1);
+
+            Func<int, int> f2 = (g1) => i;
+            int k2 = f2(5);
+            Console.WriteLine(k2);
+
+            Func<int, int,int> f3 = (g2,g3) => g2+g3;
+            int k3 = f3(5,6);
+            Console.WriteLine(k3);
+
+            Func<string, int> f4 = (s) => s.Length;
+            int k4 = f4("Rishi");
+            Console.WriteLine(k4);
+        }
+    }
+    class Chair
+    {
+        //Auto implemented peoperties
+        public string Material { get; set; }
+        public int Cost { get; set; }
+        public int Width{ get; set; }
+        public int Height { get; set; }
+        public int Length { get; set; }
+    }
+}
