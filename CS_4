@@ -1,0 +1,84 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+//using System.Text;
+using System.Threading.Tasks;
+
+namespace ConApp1
+{
+    class CS4Demo
+    {
+        static void Main(string[] args)
+        {
+            Car1 c = new Car1();
+           // c.WashCar(level: 40, scrubber: "XYZ", soap: "rrr");
+
+            c.WashCar();
+
+            dynamic q = new Car1();
+            q.Message();
+
+            Console.WriteLine("main started");
+            Task t1 = new Task(new Action(() =>
+            {
+                for (int i = 0; i < 10; i++) { 
+                    Console.WriteLine("Task 1\t="+ i);
+                }
+            }
+            ));
+
+            //2 Task
+
+            Task t2 = new Task(new Action(() =>
+            {
+                for (int i = 0; i < 10; i++) { 
+                    Console.WriteLine("Task 2 \t="+ i);
+                }
+            }
+            ));
+
+            Action a = new Action(() =>
+            {
+                Console.WriteLine("New action invoked");
+            });
+
+            t1.Start();
+            t2.Start();
+            Task t3 = new Task(a);
+            t3.Start();
+
+
+
+            Console.WriteLine("main ended");
+
+            Console.ReadKey();
+
+            Console.WriteLine("--------------------------------Paraller------------");
+            Parallel.For(1, 51, (i) => { Console.WriteLine(i); });
+       
+            //Parallel Foreach
+            string[] arr= {"i am rishi","Kumar ","from jharkhand","fdfhj fjhjf ","hdf  dfkdf"," dhfdjfhdjhdjhf"};
+            Parallel.ForEach(arr, (s) => { Console.WriteLine(s); });
+        }
+       
+    }
+    class Car1
+    {
+        //We can declare default parameter in definition, but it should be last
+
+        public void WashCar(string soap="aa", int level=5, string scrubber = "fdfdf")
+        {
+            Console.WriteLine("soap = {0}, level = {1} , scrubber = {2}", soap,level,scrubber);
+            Console.WriteLine("Hello");
+        }
+        //public void WashCar(string soap, int level, string scrubber)
+        //{
+
+        //}
+
+        public void Message()
+        {
+            Console.WriteLine("Hello how r u");
+        }
+    }
+}
