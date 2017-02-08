@@ -1,0 +1,119 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Data;
+using System.Data.SqlClient;
+
+namespace ConApp1
+{
+    class ADODemo
+    {
+        static void Main(string[] args)
+        {
+            SqlConnection con = new SqlConnection("Data source=(local);Initial Catalog=mydb; Integrated Security=true");
+            con.Open();
+
+            SqlCommand cmd = new SqlCommand("select * from emp; select * from demo", con);
+
+            SqlDataReader rd= cmd.ExecuteReader();
+
+            while (rd.Read())
+            {
+                Console.WriteLine(rd[0] + "\t" + rd[1]);
+              
+            }
+            Console.WriteLine("---------------------");
+            rd.NextResult();
+            while (rd.Read())
+            {
+                Console.WriteLine(rd[0] + "\t" + rd[1]);
+               
+            }
+            rd.Close();
+
+            //Console.WriteLine("Enter emp ID");
+            //int id = Int32.Parse(Console.ReadLine());
+
+            //Console.WriteLine("Enter emp Name");
+            //string s = Console.ReadLine();
+           //// cmd = new SqlCommand("insert into emp(empid,ename) values("+id+",'"+s+"')",con);
+
+           // cmd = new SqlCommand("insert into emp(empid,ename) values(@id,@name)", con);
+
+           // SqlParameter p1 = new SqlParameter("@id",id);
+           // SqlParameter p2 = new SqlParameter("@name", s);
+
+           // cmd.Parameters.Add(p1);
+           // cmd.Parameters.Add(p2);
+           // //
+           //// cmd.Parameters.AddWithValue("@id",empid);
+
+
+           // cmd.ExecuteNonQuery();
+           // Console.WriteLine("Inserted");
+
+           // //Update
+
+           // Console.WriteLine("Enter salary for employee");
+           // int sal = Int32.Parse(Console.ReadLine());
+
+           // cmd = new SqlCommand("update emp set salary=@sal where empid=@id",con);
+           // SqlParameter p3 = new SqlParameter("@sal", sal);
+           // cmd.Parameters.Add(p3);
+           // cmd.Parameters.AddWithValue("@id",id);
+           // cmd.ExecuteNonQuery();
+           // Console.WriteLine("Updated");
+
+           ////Delete
+
+           // cmd = new SqlCommand("delete from emp where empid=@id",con);
+           // cmd.Parameters.AddWithValue("@id",id);
+           // cmd.ExecuteNonQuery();
+           // Console.WriteLine("Deleted");
+
+            //ExecutreScalar()- Return single value from database
+
+            cmd = new SqlCommand("select count(*) from emp", con);
+            int count = (int)cmd.ExecuteScalar();
+            Console.WriteLine("Total no of emp \t"+ count);
+
+            //Stored Procedure
+
+            Console.WriteLine("---------------------------SP----------------------");
+
+            SqlCommand cmd1 = new SqlCommand();
+            cmd1.CommandText = "OutProc1";
+            cmd1.CommandType = CommandType.StoredProcedure;
+            cmd1.Connection = con;
+
+            cmd1.Parameters.AddWithValue("@aa",4);
+
+            SqlParameter a = new SqlParameter("@name",SqlDbType.VarChar,30 );
+            a.Direction = ParameterDirection.Output;
+
+            SqlParameter b = new SqlParameter("@sal",SqlDbType.Int);
+            b.Direction = ParameterDirection.Output;
+
+            cmd1.Parameters.Add(a);
+            cmd1.Parameters.Add(b);
+           
+
+
+            cmd1.ExecuteNonQuery();
+            Console.WriteLine(a.Value);
+            Console.WriteLine(b.Value);
+
+            cmd1.CommandText = "Message";
+            cmd1.CommandType = CommandType.StoredProcedure;
+            cmd1.Connection = con;
+
+            cmd1.Parameters.AddWithValue("@id",5);
+
+
+            con.Close();
+        }
+    }
+
+}
