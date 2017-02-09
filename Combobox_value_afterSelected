@@ -1,0 +1,61 @@
+ private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBox1.SelectedItem == "Bachalor")
+            {
+                con.Open();
+                string q = "select courseName,courseType from course where courseType='Bachalor'";
+                cmd = new SqlCommand(q, con);
+
+                da.SelectCommand = cmd;
+
+                DataSet ds = new DataSet();
+                da.Fill(ds);
+                comboBox2.DataSource = ds.Tables[0];
+                comboBox2.DisplayMember = "courseName";
+                comboBox2.ValueMember = "courseName";
+                con.Close();
+            }
+            else if (comboBox1.SelectedItem == "Master")
+            {
+                con.Open();
+                string q = "select courseName,courseType from course where courseType='Master'";
+                cmd = new SqlCommand(q, con);
+
+                da.SelectCommand = cmd;
+
+                DataSet ds = new DataSet();
+                da.Fill(ds);
+                comboBox2.DataSource = ds.Tables[0];
+                comboBox2.DisplayMember = "courseName";
+                comboBox2.ValueMember = "courseName";
+                con.Close();
+            }
+            else
+            {
+                con.Open();
+                string q = "select courseName,courseType from course where courseType='Management'";
+                cmd = new SqlCommand(q, con);
+
+                da.SelectCommand = cmd;
+
+                DataSet ds = new DataSet();
+                da.Fill(ds);
+                comboBox2.DataSource = ds.Tables[0];
+                comboBox2.DisplayMember = "courseName";
+                comboBox2.ValueMember = "courseName";
+                con.Close();
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            string val1 = comboBox1.Text;
+            string val2 = comboBox2.Text;
+            con.Open();
+            string q = "select * from studentDetail where  courseName = '" + val2 + "'";
+            da = new SqlDataAdapter(q, con);
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+            dataGridView1.DataSource = dt;
+            con.Close();
+        }
