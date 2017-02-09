@@ -1,0 +1,218 @@
+create table billCalculation(user_name varchar(10), mobile_no bigint primary key, operator varchar(10),bill_month varchar(10),call_duration int)
+
+alter table billCalculation drop column bill_month
+
+insert into  billCalculation values('Rishi',7204283036,'BSNL',100)
+
+update billCalculation set call_duration=50 
+insert into  billCalculation values('Sanjeet',900428036,'Vodafone',100)
+
+insert into  billCalculation values('Tara',9004283036,'IDEA',100)
+insert into  billCalculation values('Himanshu',8704283036,'Tata',100)
+
+
+create function dbo.CalculateBillAmount()
+
+
+alter table billCalculation drop column call_duration
+
+create table call_duration(id int identity(1,1),m_no bigint references billCalculation(mobile_no),duration int)
+alter table modify billCalculation to Customer
+
+select * from call_duration
+
+insert into  call_duration(m_no,duration) values(7204283036,34)
+
+select sum(duration) ,m_no from call_duration group by m_no
+Go
+
+
+
+alter proc calculate_bill(@mobile bigint)
+as
+begin
+	declare @bill int,@no_of_call int,@m bigint
+	--select @no_of_call=sum(duration) from call_duration group by m_no
+	select @no_of_call=sum(duration) ,@m=m_no from call_duration group by m_no
+
+	print str(@no_of_call)+'RS' 
+	print str(@m)+'NO' 
+	print str(@mobile)+'NO'
+	if(@no_of_call< 50)
+	begin
+		set @bill = 0
+		print 'O rs'
+	end
+	else if(@no_of_call > 50 and @no_of_call < 100)
+	begin
+		set @bill = (@no_of_call-50)*0.5
+		print str(@bill)+' rs'
+
+	end
+	else if(@no_of_call > 100 and @no_of_call < 200)
+	begin
+		declare @first int,@second int
+		set @first =0
+		set @second=(@no_of_call-50)*0.2
+		set @bill = @first+@second
+		print str(@bill)+' rs'
+	end
+	else if(@no_of_call > 200 )
+	begin
+		set @bill = (@no_of_call-50)*1
+		print str(@bill)+' rs'
+	end
+end
+
+
+DECLARE @Total_min int
+set @Total_min =
+exec calculate_bill 900428036
+		
+
+select sum(duration) ,m_no from call_duration group by m_no
+select * from billCalculation
+
+alter table 
+
+
+
+--2 Problem Banking transaction
+
+select * from customer2
+select * from account2
+select * from transactio2
+
+
+select * from customer2
+create table customer2(cid int primary key identity(100,1),cname varchar(10),mobile bigint unique,id int )
+insert into customer2(cname,mobile,id) values('Rishi','7204283036',1234)
+insert into customer2(cname,mobile,id) values('MOnu','9004283036',1234)
+insert into customer2(cname,mobile,id) values('Sonu','7004283036',1524)
+
+
+
+create table account2(acno int  primary key identity(1000,1),ac_type varchar(10), balance int, branch varchar(10), bank varchar(10),cid int references customer2(cid))
+select * from account2
+
+
+drop table customer2
+create table transaction2(trid int primary key identity(1,1), ac_no int references account2(acno), tranName varchar(10),trdate date, Transfer_to int)
+
+select * from transaction2
+
+insert into transaction2(acno,tranName) values(1000,'dep')
+insert into transaction2(acno,tranName) values(1000,'witd')
+insert into transaction2(acno,tranName) values(1002,'witd')
+
+
+go
+
+alter proc DepWith(@ac_no int, @trantype varchar(10),@bal int)
+as
+begin
+	declare @avl_bal int
+	select @avl_bal=balance from account2 where acno=@ac_no
+	
+	if(@trantype='dep')
+	begin
+		print  'Your Previous Balance is '+str(@avl_bal)+'Rs'
+		set @avl_bal=@avl_bal+@bal
+		update account2 set balance=@avl_bal where acno=@ac_no
+		insert into transaction2(ac_no, tranName,trdate) values(@ac_no,@trantype,CONVERT (date, SYSDATETIME()))
+		print 'Successfully Deposited Your Amount !!'
+		print 'Available balance is' + str(@avl_bal)
+	end
+	if(@trantype='witd')
+	begin
+		 if(@bal >@avl_bal )
+		 begin
+			print 'Insufficent Balance'
+			rollback
+		 end
+		 else
+		 begin
+			print  'Your Previous Balance is '+str(@avl_bal)+'Rs'
+			set @avl_bal=@avl_bal-@bal
+			update account2 set balance=@avl_bal where acno=@ac_no
+			insert into transaction2(ac_no, tranName,trdate) values(@ac_no,@trantype,CONVERT (date, SYSDATETIME()))
+			print 'Successfully Withdraw Your Amount !!'
+			print 'Available balance is' + str(@avl_bal)
+		 end
+	end
+end
+
+
+
+alter proc display(@accountno int)
+as
+begin
+	declare @acno int, @name varchar(10), @actype varchar(10), @balance int
+	select @acno=acno ,@balance=balance, @actype=ac_type from account2 where  acno=@accountno
+	select  @name=cname from account2 a,customer2 c where a.acno=@accountno and a.cid=c.cid
+	print 'Acount No' + str(@acno)
+	print 'Customer Name   ' + @name
+	print 'Acount Type    ' + @actype
+	print 'Available Bal' + str(@balance)
+end
+
+
+
+alter proc transferAmount(@ac_no int,@bal int,@transferac int)
+as
+begin
+		declare @avl_bal int, @dacbal int
+		select @avl_bal=balance from account2 where acno=@transferac
+		select @dacbal=balance from account2 where acno=@ac_no
+		if(@bal >@dacbal )
+		 begin
+			print 'Insufficent Balance'
+			rollback
+		 end
+		 else
+		 begin
+			DECLARE @setbal int
+			print  'Your  Balance is '+str(@dacbal)+'Rs'
+			set @avl_bal=@avl_bal+@bal
+			set @setbal =@dacbal-@bal
+			update account2 set balance=@avl_bal where acno=@transferac
+			update account2 set balance=@setbal where acno=@ac_no
+			insert into transaction2(ac_no, tranName,trdate,Transfer_to) values(@ac_no,'Tran',CONVERT (date, SYSDATETIME()),@transferac)
+			print 'Successfully Transfer  Your Amount !!'
+			print 'Available balance is' + str(@setbal)
+		 end
+
+end
+
+
+
+declare @tran varchar(10)
+set @tran=select tranName from  transaction2
+exec DepWith 1000  ,select tranName from transaction2, 100
+
+exec DepWith 1000 ,dep, 5000
+
+
+select * from transaction2
+select * from account2
+select * from customer2
+---------------------------------------
+--Calling all procedure
+
+exec DepWith 1000 ,dep, 1000
+exec DepWith 1000 ,witd, 5000
+
+exec display 1000
+
+exec transferAmount 1000 ,500, 1002
+
+
+
+SELECT SYSDATETIME()  
+    ,SYSDATETIMEOFFSET()  
+    ,SYSUTCDATETIME()  
+    ,CURRENT_TIMESTAMP  
+    ,GETDATE()  
+    ,GETUTCDATE();  
+
+	SELECT CONVERT (date, SYSDATETIME()) 
