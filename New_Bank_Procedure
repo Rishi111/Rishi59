@@ -1,0 +1,48 @@
+
+alter procedure [dbo].[CustomerRegister](@name varchar(20), @age int,@address varchar(50),@dob date, @mobile varchar(10), @res  int out)
+as
+begin
+insert into cust values(@name,@age,@address,@dob,@mobile)
+select @res= SCOPE_IDENTITY()
+end​
+
+
+alter procedure [dbo].[Transaction](@acno int, @trtype varchar(20), @odate date, @amount int)
+as
+begin
+declare @bal int, @newbal int
+
+insert into transactionDetails values(@acno,@trtype,@odate,@amount)
+select @bal=bal from account where acno=@acno
+if(@trtype="Deposit")
+	begin
+		set @newbal=@bal+@amount
+		update set bal=@newbal where acno=@acno
+	end
+else if(@trtype="Withdraw")
+	begin
+	if(@amount>@bal || @amount <100)
+		begin
+		set @newbal=@bal-@amount
+			update set bal=@newbal where acno=@acno
+		end
+	end
+	
+else if(@trtype="Deposit")
+	begin
+
+	end
+end​
+
+
+
+
+
+
+
+create procedure [dbo].[AccountRegister](@cid int,@actype varchar(50),@odob date, @bal int, @acno  int out)
+as
+begin
+insert into account values(@cid,@actype,@odob,@bal)
+select @acno= SCOPE_IDENTITY()
+end​
