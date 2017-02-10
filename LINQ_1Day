@@ -1,0 +1,227 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConApp1
+{
+    class LinqDemo
+    {
+        static void Main(string[] args)
+        {
+           List<Chair> clist = new List<Chair>
+           {
+           new Chair { Material="Wooden",Cost=1100, Length=10, Width=4, Height=4}, 
+           new Chair { Material="Wooden",Cost=1500, Length=10, Width=4, Height=4},
+           new Chair { Material = "Plastic", Cost = 1800, Length = 10, Width = 4, Height = 4 },
+           new Chair { Material = "Fiber", Cost = 1900, Length = 10, Width = 4, Height = 4 },
+           new Chair { Material="Steel",Cost=1200, Length=10, Width=4, Height=4}, 
+           new Chair { Material="Steel",Cost=1200, Length=10, Width=4, Height=4}, 
+           new Chair { Material="Steel",Cost=1200, Length=10, Width=4, Height=4}, 
+           new Chair { Material="Wooden",Cost=1500, Length=10, Width=4, Height=4},
+           new Chair { Material = "Plastic", Cost = 1800, Length = 10, Width = 4, Height = 4 },
+           new Chair { Material = "Fiber", Cost = 1900, Length = 10, Width = 4, Height = 4 }
+           };
+
+          
+
+           var q1 = from i in clist
+                    select i;
+          q1= clist.Select((k) => k);
+           foreach (var item in q1)
+           {
+               Console.WriteLine(item.Cost +" "+ item.Material);
+           }
+
+           Console.WriteLine("-------------------------------Query2 With Where Condition-------------------");
+
+           var q2 = from i in clist
+                    where i.Cost == 1500
+                    select i;
+           q2=  clist.Where((k) => k.Cost == 1500).Select(k=>k);
+           foreach (var item in q2)
+           {
+               Console.WriteLine(item.Cost + " " + item.Material);
+           }
+
+           Console.WriteLine("-------------------------------Query3 With Expression-------------------");
+
+           //var q3 = from i in clist
+           //         where i.Cost > 1500 && i.Length > 5
+           //         select i;
+         var  q3 = clist.Where((k) => k.Cost > 1500 && k.Length > 5).Select((k) => k);
+
+           foreach (var item in q3)
+           {
+               Console.WriteLine(item.Cost + " " + item.Material);
+           }
+
+           Console.WriteLine("-------------------------------Query4 For Plastic Material-------------------");
+           //var q4 = from i in clist
+           //         where i.Material.Equals("Plastic")
+           //        // select new { Material = i.Material, cost = i.Cost };
+           //         select i; //select new {Material =i.Material, cost= i.cost}
+       var  q4=  clist.Where((i) => i.Material.Equals("Plastic")).Select(i => new { Material = i.Material, Cost = i.Cost });
+                
+           foreach (var item in q4)
+           {
+               Console.WriteLine(item.Cost + " " + item.Material );
+           }
+
+           Console.WriteLine("-------------------------------Query5 Order By-------------------");
+
+           //var q5 = from i in clist
+           //         where i.Cost >1000
+           //         orderby i.Cost descending
+           //         select i;
+
+           var q5 = clist.Where((i) => i.Cost > 1000).OrderByDescending(i => i.Cost).Select(i => i);
+            foreach(var item in  q5)
+            {
+              Console.WriteLine(item.Cost + " " + item.Material +" "+ item.Length);
+            }
+
+            Console.WriteLine("-------------------------------Query6 Group By-------------------");
+
+            //var q6 =from i in clist
+            //        group i by i.Material;
+
+          var  q6= clist.GroupBy((i) => i.Material);
+           foreach (var item in q6)
+           {
+               Console.WriteLine(item.Key);
+               Console.WriteLine("-----------") ;
+               foreach (var item1 in item)
+               {
+                   Console.WriteLine(item1.Material +" "+ item1.Cost);
+               }
+           }
+           Console.WriteLine("-------------------------------Query7 Group INTO-------------------");
+
+           var q7 = from i in clist
+                    group i by i.Material into grp
+                    where grp.Count() >=3
+                    select grp;
+            
+            clist.GroupBy((i)=>i.Material)
+           foreach (var item in q7)
+           {
+               Console.WriteLine(item.Key);
+               Console.WriteLine("-----------");
+               foreach (var item1 in item)
+               {
+                   Console.WriteLine(item1.Material + " " + item1.Cost);
+               }
+           }
+
+           Console.WriteLine("-----------------------------------------Let Clause ------------------");
+           string[] strings = 
+            {
+                "A penny saved is a penny earned.",
+                "The early bird catches the worm.",
+                "The pen is mightier than the sword." 
+            };
+
+           // Split the sentence into an array of words
+           // and select those whose first letter is a vowel.
+
+           var earlyBirdQuery =
+               from sentence in strings
+               let words = sentence.Split(' ')
+               from word in words
+               let w = word.ToLower()
+               where w[0] == 'a' || w[0] == 'e'
+                   || w[0] == 'i' || w[0] == 'o'
+                   || w[0] == 'u'
+               select word;
+
+           // Execute the query.
+           foreach (var v in earlyBirdQuery)
+           {
+               Console.WriteLine("\"{0}\" starts with a vowel", v);
+           }
+
+           // Keep the console window open in debug mode.
+           //Console.WriteLine("Press any key to exit.");
+           //Console.ReadKey();
+
+
+           Console.WriteLine("-----------------------------------------Join ------------------");
+
+           List<Category> categories = new List<Category>()
+            { 
+            new Category(){Name="Beverages", ID=001},
+            new Category(){ Name="Condiments", ID=002},
+            new Category(){ Name="Vegetables", ID=003},
+            new Category() {  Name="Grains", ID=004},
+            new Category() {  Name="Fruit", ID=005}            
+            };
+
+           // Specify the second data source.
+           List<Product> products = new List<Product>()
+            {
+          new Product{Name="Cola",  CategoryID=001},
+          new Product{Name="Tea",  CategoryID=001},
+          new Product{Name="Mustard", CategoryID=002},
+          new Product{Name="Pickles", CategoryID=002},
+          new Product{Name="Carrots", CategoryID=003},
+          new Product{Name="Bok Choy", CategoryID=003},
+          new Product{Name="Peaches", CategoryID=005},
+          new Product{Name="Melons", CategoryID=005},
+            };
+
+           var innerJoinQuery =
+             from category in categories
+             join prod in products on category.ID equals prod.CategoryID
+             select new { Category = category.ID, Product = prod.Name };
+
+           Console.WriteLine("InnerJoin:");
+           Console.WriteLine("------------");
+           // Execute the query. Access results 
+           // with a simple foreach statement.
+           foreach (var item in innerJoinQuery)
+           {
+               Console.WriteLine("{0,-10}{1}", item.Product, item.Category);
+           }
+           Console.WriteLine("InnerJoin: {0} items in 1 group.", innerJoinQuery.Count());
+           Console.WriteLine(System.Environment.NewLine);
+
+
+
+           var leftOuterQuery =
+              from category in categories
+              join prod in products on category.ID equals prod.CategoryID into prodGroup
+              select prodGroup.DefaultIfEmpty(new Product() { Name = "Nothing!", CategoryID = category.ID });
+
+           // Store the count of total items (for demonstration only).
+           int totalItems = 0;
+
+           Console.WriteLine("---------Left Outer Join----:");
+           Console.WriteLine("-------------------------");
+           // A nested foreach statement  is required to access group items
+           foreach (var prodGrouping in leftOuterQuery)
+           {
+               Console.WriteLine("Group:", prodGrouping.Count());
+               foreach (var item in prodGrouping)
+               {
+                   totalItems++;
+                   Console.WriteLine("  {0,-10}{1}", item.Name, item.CategoryID);
+               }
+           }
+           Console.WriteLine("LeftOuterJoin: {0} items in {1} groups", totalItems, leftOuterQuery.Count());
+           Console.WriteLine(System.Environment.NewLine);
+        }
+    }
+    class Product
+    {
+        public string Name { get; set; }
+        public int CategoryID { get; set; }
+    }
+
+    class Category
+    {
+        public string Name { get; set; }
+        public int ID { get; set; }
+    }
+}
