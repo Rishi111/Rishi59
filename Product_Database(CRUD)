@@ -1,0 +1,254 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Data;
+using System.Data.SqlClient;
+
+
+namespace ProductApplication
+{
+    class Program
+    {
+        SqlConnection con = new SqlConnection("Data Source=(local)\\SQLEXPRESS;Initial Catalog=Test;Integrated Security=True");
+
+        SqlCommand cmd = new SqlCommand();
+        static void Main(string[] args)
+        {
+            int ch;
+            Program ob = new Program();
+
+       
+            while (true)
+            {
+                Console.WriteLine("Enter opeion \n 1 Insert Product Details \n 2 Get Details \n 3 Display Sorting order \n 4 update Details \n 5 Delete Details \n 6 View Particular Details \n 7 Exit \n");
+                ch = Int32.Parse(Console.ReadLine());
+
+                switch (ch)
+                {
+                    case 1: ob.insertProduct();
+                        break;
+                    case 2: ob.DisplayProduct();
+                        break;
+
+                    case 3: ob.DisplaySortingOrder();
+                        break;
+
+                    case 4: ob.UpdatePrice();
+                        break;
+                    case 5: ob.DeleteProduct();
+                        break;
+
+                    case 6: ob.ViewParticularOrder();
+                        break;
+
+                    case 7: return;
+             
+
+                }
+            }
+        }
+        public void DeleteProduct()
+        {
+            con.Open();
+            Console.WriteLine("Enter product name");
+            string pname=Console.ReadLine();
+            cmd = new SqlCommand("delete from product where pname='" + pname + "'",con);
+            cmd.ExecuteNonQuery();
+            Console.WriteLine("Product Deleted");
+            con.Close();
+        }
+        public void insertProduct()
+        {
+            try
+            {
+                con.Open();
+                //Console.WriteLine("Connected");
+
+                string pName, sNo, vendor, category;
+                int price;
+
+                Console.WriteLine("Eenter Product Name");
+                pName = Console.ReadLine();
+                foreach (char i in pName)
+                {
+                    if (!char.IsLetter(i))
+                    {
+                        throw new ProductException("Only Alphabate are allowed ");
+                    }
+                }
+
+                Console.WriteLine("Eenter SrNo");
+                sNo = Console.ReadLine();
+               
+
+                Console.WriteLine("Eenter Vendor Name");
+                vendor = Console.ReadLine();
+
+                Console.WriteLine("Category");
+                category = Console.ReadLine();
+
+                Console.WriteLine("Eenter Price");
+                price = Convert.ToInt16(Console.ReadLine());
+                
+                //cmd = new SqlCommand("insert into product values('" + pName + "','" + sNo + "','" + vendor + "','" + category + "'," + price + ")", con);
+                Console.WriteLine("Enter Date");
+                DateTime edate = Convert.ToDateTime(Console.ReadLine());
+                int dValidation=DateTime.Now.CompareTo(edate);
+                if (!(dValidation==1))
+                {
+                    throw new ProductException("Enetr valid date ");
+
+                }
+
+                cmd.CommandText = "insertProduct";
+
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Connection = con;
+
+                
+                cmd.Parameters.AddWithValue("@pname", pName);
+                cmd.Parameters.AddWithValue("@sno", sNo);
+                cmd.Parameters.AddWithValue("@vendor",vendor);
+                cmd.Parameters.AddWithValue("@cat", category);
+                cmd.Parameters.AddWithValue("@price", price);
+                cmd.Parameters.AddWithValue("@edate",edate);
+
+                cmd.ExecuteNonQuery();
+                Console.WriteLine("Values Inserted Successfully");
+                con.Close();
+
+            }
+            catch (ProductException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            catch (FormatException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            finally 
+            {
+                con.Close();
+            }
+        }
+        public void DisplayProduct()
+        {
+            con.Open();
+            cmd = new SqlCommand("select * from product",con);
+            SqlDataReader dr = cmd.ExecuteReader();
+            Console.WriteLine("----------------------Product Details------------------------");
+            Console.WriteLine("PR_ID \t PR_Name \t Sr_No  \t Vendor  \tCategory  \t Price");
+
+            while (dr.Read())
+            {
+                Console.WriteLine(dr[0] + " \t " + dr[1] + "    \t " + dr[2] + "     \t " + dr[3] + "   \t " + dr[4] + "    \t" + dr[5] + "    \t" + dr[6]);
+            }
+            con.Close();
+        }
+        public void ViewParticularOrder()
+        {
+            con.Open();
+            Console.WriteLine("Enter produc id");
+            int id = Int16.Parse(Console.ReadLine());
+
+            cmd = new SqlCommand("select * from product where id="+id+"", con);
+            SqlDataReader dr = cmd.ExecuteReader();
+            Console.WriteLine("----------------------Product Details------------------------");
+            Console.WriteLine("PR_ID \t PR_Name \t Sr_No  \t Vendor  \tCategory  \t Price");
+            while (dr.Read())
+            {
+
+                Console.WriteLine(dr[0] + " \t " + dr[1] + "    \t " + dr[2] + "     \t " + dr[3] + "   \t " + dr[4] + "    \t" + dr[5] + "    \t" + dr[6]);
+            }
+            dr.Close();
+            con.Close();
+            
+        }
+        public void DisplaySortingOrder()
+        {
+            con.Open();
+            cmd = new SqlCommand("select * from product order by pname", con);
+            SqlDataReader dr = cmd.ExecuteReader();
+            Console.WriteLine("----------------------Product Details------------------------");
+            Console.WriteLine("PR_ID \t PR_Name \t Sr_No  \t Vendor  \tCategory  \t Price");
+            while (dr.Read())
+            {
+
+                Console.WriteLine(dr[0] + " \t " + dr[1] + "    \t " + dr[2] + "     \t " + dr[3] + "   \t " + dr[4] + "    \t" + dr[5] + "    \t" + dr[6]);
+            }
+            dr.Close();
+            con.Close();
+            
+        }
+        public void UpdatePrice()
+        {
+            con.Open();
+            Console.WriteLine("Enter Product Id");
+            int id = Int16.Parse(Console.ReadLine());
+
+            Console.WriteLine("Enter new price");
+            double nprice = Convert.ToDouble(Console.ReadLine());
+
+            cmd.CommandText = "UpdatePrice";
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            cmd.Connection = con;
+
+            SqlParameter a = new SqlParameter("@message", SqlDbType.VarChar,30);
+            a.Direction = ParameterDirection.Output;
+            cmd.Parameters.Add(a);
+
+            cmd.Parameters.AddWithValue("@nprice",nprice);
+            cmd.Parameters.AddWithValue("@id", id);
+
+            cmd.ExecuteNonQuery();
+            Console.WriteLine(a.Value);
+           
+            con.Close();
+        }
+    }
+}
+-------------------------------------------------------------------Databae And Procedure
+
+select * from product
+
+alter proc insertProduct(@pname varchar(20), @sno varchar(20), @vendor varchar(20), @cat varchar(20),@price numeric(10,2),@edate date)
+as
+begin
+	insert into product values(@pname,@sno,@vendor,@vendor,@price,@edate)	
+end
+
+
+create proc DisplayProduct(@mas varchar(10))
+as
+begin
+	select * from product order by id
+end
+
+alter proc UpdatePrice(@nprice numeric(10,2),@id int, @message varchar(50)out)
+as
+begin
+	declare @price numeric(10,2)
+	select @price=price from product
+	if(@price<100)
+	begin
+	  select @message= 'price cannot be lower than 100'
+	  end
+	  else
+	  begin
+		update product set price=@nprice where id=@id
+	  end
+end
+
+declare msg varchar(50)
+exec UpdatePrice 80, 100, msg
+print msg
+
+select * from sys.tables
+
+alter table product add edate date
