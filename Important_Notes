@@ -1,0 +1,2 @@
+
+select * from sys.tables          //For Getting all tables from current database in Sql
