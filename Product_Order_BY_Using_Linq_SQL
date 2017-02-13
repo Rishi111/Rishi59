@@ -1,0 +1,188 @@
+-----------------------------------DB---------------------------------------------------------------
+
+		--insertOrderDetails
+alter proc insertOrderDetails(@name varchar(10),@odate date, @status varchar(20))
+as
+begin
+	insert into orderDetail values(@name,@odate,@status)
+end
+
+		--insertProductDetails
+alter proc insertProductDetails(@name varchar(20),@des varchar(20), @quant varchar(10), @price numeric(6,2))
+as
+begin
+	insert into Product values(@name,@des,@quant,@price)
+end
+
+			--updateProductStatus
+create proc updateProductStatus(@id int,@staus varchar(10))
+as
+begin
+	update orderDetail set status=@staus where orderID=@id
+end
+
+select * from orderDetails
+
+
+select * from orderDetails
+select * from Product
+-----------------------------------------------------------------------Coding-------------------------------
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace Linq_SQl
+{
+    class Program
+    {
+        DataClasses2DataContext dc = new DataClasses2DataContext();
+        static void Main(string[] args)
+        {
+            Program o = new Program();
+            int ch;
+            while (true)
+            {
+                Console.WriteLine("Enter option \n 1 Insert customer Details \n 2 Insert product Details \n 3 Display Product details \n 4 Display Order Details \n 5 Update Staus \n 7 Exit  ");
+                ch = Int32.Parse(Console.ReadLine());
+
+                switch (ch)
+                {
+                    case 1: o.InsertCustomerDetails();
+                            break;
+                    case 2: o.InsertProductDetails();
+                            break;
+                    case 3: o.DisplayProductDetails();
+                            break;
+                    case 4: o.DisplayOrderDetails();
+                            break;
+                    case 5: o.UpdateOrderStatus();
+                            break;
+                    case 6: 
+                            break;
+                    case 7:
+                            return;
+                }
+              
+            }
+              
+        }
+        public void UpdateOrderStatus()
+        {
+            Console.WriteLine("enter order id");
+            int id = Int16.Parse(Console.ReadLine());
+
+            Console.WriteLine("Enter status");
+            string status = Console.ReadLine();
+
+            var q3 = dc.updateProductStatus(id,status);
+            Console.WriteLine("Ordr status updated");
+        }
+        public void InsertProductDetails()
+        {
+            try
+            {
+                Console.WriteLine("Enter PrductName");
+                string name = Console.ReadLine();
+                foreach (char i in name)
+                {
+                    if (!char.IsLetter(i))
+                    {
+                        throw new ProductDetails("Please enter valid name");
+                    }
+                }
+                Console.WriteLine("Enter Description");
+                string des = Console.ReadLine();
+
+                Console.WriteLine("Enter Quantity");
+                int quantity= Int16.Parse(Console.ReadLine());
+
+                Console.WriteLine("Enter Price");
+                int price = Int16.Parse(Console.ReadLine());
+
+
+
+                var ii = dc.insertProductDetails(name,des,quantity,price);
+                Console.WriteLine("Inserted product Details ");
+            }
+            catch (ProductDetails e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            catch (FormatException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+        }
+        public void InsertCustomerDetails()
+        {
+            try
+            {
+                Console.WriteLine("Enter Name");
+                string name = Console.ReadLine();
+                foreach (char i in name)
+                {
+                    if (!char.IsLetter(i))
+                    {
+                        throw new ProductDetails("Please enter valid name");
+                    }
+                }
+                Console.WriteLine("Enter Orderdate");
+                DateTime odate = Convert.ToDateTime(Console.ReadLine());
+
+                int datecheck = DateTime.Now.CompareTo(odate);
+                    if(datecheck==-1 )
+                    {
+                     throw new ProductDetails("Please enter valid Date");
+                    }
+                string staus = "Order placed";
+
+                var ii = dc.insertOrderDetails(name, odate, staus);
+                Console.WriteLine("Inserted");
+            }
+            catch (ProductDetails e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            catch (FormatException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+        }
+        public void DisplayProductDetails()
+        {
+            var q2 = from i in dc.Products
+                     select i;
+            foreach (var item in q2)
+            {
+                Console.WriteLine(item.pid +" \t"+item.name +" "+item.price);
+            }
+        }
+        public void DisplayOrderDetails()
+        {
+            var q2 = from i in dc.orderDetails
+                     select i;
+            foreach (var item in q2)
+            {
+                Console.WriteLine(item.orderID+ " \t" + item.cnaem + " " + item.odate +" "+item.status);
+            }
+        }
+    }
+}
+--------------------------------------------------------------------------Exception-------------------
+namespace Linq_SQl
+{
+    class ProductDetails: Exception
+    {
+        public ProductDetails()
+            : base()
+        { }
+        public ProductDetails(string msg)
+            : base(msg)
+        { }
+
+        
+    }
+}
