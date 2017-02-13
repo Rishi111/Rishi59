@@ -1,0 +1,57 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Linq_SQL
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            DataClasses1DataContext dc = new DataClasses1DataContext();
+           
+//Display Details
+            var q = from i in dc.customer2s
+                    select i;
+
+            foreach (var item in q)
+            {
+                Console.WriteLine(item.cid +"   \t"+ item.cname +" \t"+item.id +" \t"+ item.mobile);
+            }
+//Insert Details
+           
+            //dc.customer2s.InsertOnSubmit(new customer2 { cname = "rohan", mobile = 90837431, id = 7222 });
+            //dc.SubmitChanges();
+            //Console.WriteLine("Inserted");
+
+//Update Details
+            //var updateq = from i in dc.customer2s
+            //              where i.cid == 104
+            //              select i;
+
+
+            //customer2 d = updateq.Single();
+            //d.cname = "Tarakant";
+            //dc.SubmitChanges();
+            //Console.WriteLine("Updated");
+
+//Delete Details
+
+            var deleteq = from i in dc.customer2s
+                          where i.cid == 116
+                          select i;
+            customer2 dob = deleteq.Single();
+
+            dc.customer2s.DeleteOnSubmit(dob);
+            dc.SubmitChanges();
+            Console.WriteLine("Deleted");
+
+
+            var pq = dc.displayCustomerDetails2();
+            var res = pq.Single();
+            Console.WriteLine(res.cid +"    \t"+ res.cname +" "+res.mobile);
+        }
+    }
+}
