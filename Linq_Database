@@ -1,0 +1,77 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConApp1
+{
+    class Linq_ORM_MainClass
+    {
+        static void Main(string[] args)
+        {
+            DataClasses1DataContext dc = new DataClasses1DataContext();
+            var q = from i in dc.custs
+                    select i;
+
+            foreach (var item in q)
+            {
+                Console.WriteLine(item.cid +"      \t"+ item.cname+"        \t"+item.bal);
+            }
+
+            //Insert
+
+            //dc.custs.InsertOnSubmit(new cust { cid = 10, cname = "muna", bal = 4000 });
+            //dc.SubmitChanges();
+
+            //Update Record
+
+           // var qupdate = from i in dc.custs
+           //         where i.cid == 4
+           //         select i;
+
+           //cust d= qupdate.Single();
+           //d.cname = "Sourabh";
+           //d.bal = 5000;
+
+           //dc.custs.DeleteOnSubmit(d);			 //Delete Recor
+
+           //dc.SubmitChanges();
+
+           
+
+         //Stored proc			First drag and drop proc file and build then apply code
+
+           Console.WriteLine("--------------------------------sp-------------");
+          // var r = dc.MyProc1(3);
+         //  MyProc1Result res = r.Single();
+				
+          //  Console.WriteLine(res.dep +" " + res.ename);
+           var r = dc.displayDetails(2);
+           displayDetailsResult res = r.Single();
+           Console.WriteLine(res.cid + " " + res.cname);
+		
+        ////DataSet
+
+        //var q= from i in ds.Tables[0].AsEnumerable()
+        //        select i;
+				
+        //foreach(var item in q)
+        //{
+        //    Console.WriteLine(item.field<int>(0) + " " + item.field<string>(0));
+        //}
+
+
+           Console.WriteLine("---------------Linq- Entity --------------");
+
+           MydbEntities d = new MydbEntities();
+           var qr = from i in d.customer2
+                    select i;
+
+           foreach (var item in qr)
+           {
+               Console.WriteLine(item.cid+"     \t" + item.cname);
+           }
+        }
+    }
+}
