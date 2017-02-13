@@ -1,0 +1,59 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Linq_Enity2
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            MydbEntities ent = new MydbEntities();
+
+          
+            var qr = from i in ent.customer2
+                     select i;
+
+
+ //Display Without Procedure
+
+            foreach (var item in qr)
+            {
+                Console.WriteLine(item.cid + "     \t" + item.cname);
+            }
+
+ //Display by Procedure
+            Console.WriteLine("--------------------------------sp-------------");
+            var r = ent.displayCustomerDetails2();
+            var  res = r.Single();
+           
+            Console.WriteLine(res.cid + " " + res.cname);
+
+//Insert
+            //ent.customer2.Add(new customer2 { cname = "sanjeet", mobile = 600908434, id = 107888 });
+            //ent.SaveChanges();
+            //Console.WriteLine("Inserted");
+   
+//Delete
+            //var qr1 = from i in ent.customer2
+            //          where i.cid == 113
+            //          select i;
+
+            //ent.customer2.Remove(qr1.Single());
+            //ent.SaveChanges();
+            //Console.WriteLine("Deleted");
+
+//Update
+            var qr11 = from i in ent.customer2
+                       where i.cid == 103
+                       select i;
+
+            customer2 cc1 = qr11.Single();
+            cc1.mobile = 7050248874;
+            ent.SaveChanges();
+            Console.WriteLine("Updated");
+        }
+    }
+}
