@@ -1,0 +1,156 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Data;
+using System.Data.SqlClient;
+
+
+namespace ProductApplication
+{
+    class DisconnectedAdo
+    {
+
+        SqlConnection con = new SqlConnection("Data Source=(local)\\SQLEXPRESS;Initial Catalog=Student;Integrated Security=True");
+
+        SqlDataAdapter da = new SqlDataAdapter();
+
+        DataSet ds = new DataSet();
+        public void Load()
+        {
+         da = new SqlDataAdapter("select * from Product", con);
+            da.Fill(ds, "Product");
+        }
+        static void Main(string[] args)
+        {
+          
+            int ch;
+            DisconnectedAdo ob = new DisconnectedAdo();
+            ob.Load();
+
+            while (true)
+            {
+                Console.WriteLine("Enter opeion \n 1 Insert Product Details \n 2 Get Details \n 3 Display Sorting order \n 4 update Details \n 5 Delete Details \n 6 View Particular Details \n 7 Exit \n");
+                ch = Int32.Parse(Console.ReadLine());
+
+                switch (ch)
+                {
+                    case 1: ob.insertProduct();
+                        break;
+                    case 2: ob.DisplayProduct();
+                        break;
+
+                    case 3:// ob.DisplaySortingOrder();
+                        break;
+
+                    case 4: ob.UpdatePrice();
+                        break;
+                    case 5: ob.DeleteProduct();
+                        break;
+
+                    case 6: //ob.ViewParticularOrder();
+                        break;
+
+                    case 7: return;
+
+
+                }
+            }
+        }
+        public void DeleteProduct()
+        {
+            int i = 0;
+            Console.WriteLine("enter product name to delete");
+            string id = Console.ReadLine();
+            DataRow dr = ds.Tables["Product"].Rows.Add();
+
+            foreach (DataRow item in ds.Tables["Product"].Rows)
+            {
+                foreach (DataColumn item1 in ds.Tables["Product"].Columns)
+                {
+                    if (item[item1].Equals(id))
+                    {
+                        i = 0;
+                        dr = item;
+                        Console.WriteLine("Matcehd");
+                    }
+                    
+                }
+                
+            }
+            if (i == 1)
+            {
+                dr.Delete();
+            }
+            SqlCommandBuilder cb= new SqlCommandBuilder(da);
+
+            da.Update(ds.Tables["Product"]);
+        }
+                //Inseert Details
+        public void UpdatePrice()
+        {
+            Console.WriteLine("enter product id");
+            int id = Int32.Parse(Console.ReadLine());
+            //int i = 0;
+            Console.WriteLine("enter price");
+            int price = Int32.Parse(Console.ReadLine());
+
+
+            foreach (DataRow item in ds.Tables["Product"].Rows)
+            {
+                foreach (DataColumn item1 in ds.Tables["Product"].Columns)
+                {
+                    if (item["pid"].Equals(id))
+                    {
+                        item["price"] = price;
+
+                    }
+
+                }
+            }
+            SqlCommandBuilder cbd = new SqlCommandBuilder(da);
+            da.Update(ds.Tables["Product"]);
+        }
+        public void insertProduct()
+        {
+            Console.WriteLine("enter product name");
+            string name = Console.ReadLine();
+             
+            Console.WriteLine("enter desc");
+            string desc = Console.ReadLine();
+             
+            Console.WriteLine("enter Quantity");
+            int quant = Int16.Parse(Console.ReadLine());
+
+            Console.WriteLine("enter price");
+            int price = Int32.Parse(Console.ReadLine());
+
+       
+
+            DataRow dr = ds.Tables["Product"].NewRow();
+            dr["name"] = name;
+            dr["description"] = desc;
+            dr["quantity"] = quant;
+            dr["price"] = price;
+           
+
+            ds.Tables["Product"].Rows.Add(dr);
+
+            SqlCommandBuilder c = new SqlCommandBuilder(da);
+            da.Update(ds.Tables["Product"]);
+        }
+        public void DisplayProduct()
+        {   
+
+            foreach (DataRow item in ds.Tables["Product"].Rows)
+            {
+                foreach (DataColumn item1 in ds.Tables["Product"].Columns)
+                {
+                    Console.Write(item[item1] + "\t");
+                }
+                Console.WriteLine();
+            }
+
+        }
+    }
+}
