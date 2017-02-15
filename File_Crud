@@ -1,0 +1,82 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.IO;
+
+namespace FileDemo
+{
+   public  class Demo
+    {
+   public void add()
+       {
+           Console.WriteLine("insert the name");
+           string name = Console.ReadLine();
+           FileStream fs = new FileStream("file.txt", FileMode.Append, FileAccess.Write);
+           StreamWriter sw = new StreamWriter(fs);
+           sw.WriteLine(name);
+           sw.Close();
+           fs.Close();
+
+       }
+
+   public void delete()
+   {
+       Console.WriteLine("insert the name to delete");
+       string anme = Console.ReadLine();
+       string[] arr = File.ReadAllLines("file.txt");
+       List<string> list = new List<string>(arr);
+       int i = 0;
+       int final=0;
+       foreach (var item in list)
+       {
+           if (item.Contains(anme))
+           {
+               final = i;
+           }
+           i++;
+       }
+       list.RemoveAt(final);
+       FileStream fs = new FileStream("file.txt", FileMode.Create, FileAccess.Write);
+       StreamWriter sw = new StreamWriter(fs);
+       foreach (var item in list)
+       {
+           sw.WriteLine(item);
+       }
+
+       sw.Close();
+       fs.Close();
+   }
+   public void update()
+   {
+       Console.WriteLine("insert the name to change");
+       string anme = Console.ReadLine();
+       Console.WriteLine("insert the new name ");
+       string newname = Console.ReadLine();
+       string[] arr = File.ReadAllLines("file.txt");
+       List<string> list = new List<string>(arr);
+       int i = 0;
+       int final = 0;
+       foreach (var item in list)
+       {
+           if (item.Contains(anme))
+           {
+               final = i;
+           }
+           i++;
+       }
+       list.RemoveAt(final);
+       list.Insert(final, newname);  
+       FileStream fs = new FileStream("file.txt", FileMode.Create, FileAccess.Write);
+       StreamWriter sw = new StreamWriter(fs);
+       foreach (var item in list)
+       {
+           sw.WriteLine(item);
+       }
+
+       sw.Close();
+       fs.Close();
+   }
+   }
+}
