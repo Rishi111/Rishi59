@@ -1,0 +1,42 @@
+
+namespace FinalTest
+{
+    //Generic Class ,Containt generic method
+    class Test<T>
+    {
+        public void Add(T a, T b)
+        {
+            Console.WriteLine(a +" "+ b);
+        }
+    }
+
+    //Simple class contain generic method
+    class SimpleClass
+    { 
+        public void Display<T>(T a)
+        {
+            Console.WriteLine(a +" \t   Val");
+        }
+    }
+
+    class GenericExample
+    {
+        static void Main(string[] args)
+        {
+                    //Generic class
+            Test<string> s = new Test<string>();
+            s.Add("ssss","dfdfdf");
+
+            Test<int> i = new Test<int>();
+            i.Add(4,5);
+
+                    //Simple class
+            SimpleClass sc = new SimpleClass();
+            sc.Display("hi");
+
+            sc.Display(5.0);
+
+            sc.Display(5);
+        }
+    }
+}
