@@ -1,0 +1,56 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.IO;
+using System.Data.SqlClient;
+
+namespace FinalTest
+{
+    public class customer
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
+        class CurdOperation_Using_File
+         {
+
+             SqlConnection con = new SqlConnection("Data Source=Rishi-PC\\sqlexpress;Initial Catalog=Student;Integrated Security=True;");
+             SqlCommand cmd = new SqlCommand();
+
+            static void Main(string[] args)
+            {
+                CurdOperation_Using_File obj = new CurdOperation_Using_File();
+    
+                List<customer> b = new List<customer>();
+                customer c = new customer { Id = 1, Name = "abc" };
+                customer c1 = new customer { Id = 2, Name = "rishi" };
+                customer c2 = new customer { Id = 3, Name = "rohan" };
+
+                b.Add(c);
+                b.Add(c1);
+                b.Add(c2);
+
+                string[] s=new string[10];
+                Console.WriteLine();
+                foreach (var item in b)
+                {
+                    Console.WriteLine(item.Id +" \t"+ item.Name);
+                    obj.Insert(item);
+                    Console.WriteLine(item);
+                }           
+                Console.WriteLine();
+                
+
+            }
+            public void Insert(customer b)
+            {
+                con.Open();
+                
+                cmd = new SqlCommand("insert into emp values('" + b.Id+"','"+b.Name +"')", con);
+                cmd.ExecuteNonQuery();
+                Console.WriteLine("Inserted");
+                con.Close();
+            }
+         }
+}
