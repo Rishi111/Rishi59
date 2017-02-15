@@ -1,0 +1,120 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Data.SqlClient;
+
+namespace FileDatabase
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Program p = new Program();
+            //FileStream fs= new FileStream("exp.txt", FileMode.Append, FileAccess.Write);
+            ////   StreamWriter sw = new StreamWriter();
+            ////Console.WriteLine("enter name");
+            ////string name = Console.ReadLine();
+            ////Console.WriteLine("enter dept name");
+            ////string dept = Console.ReadLine();
+            ////Console.WriteLine("enter salary");
+            ////int salary = Int32.Parse(Console.ReadLine());
+            ////BinaryWriter bw = new BinaryWriter(fs);
+            ////bw.Write(name);
+            ////bw.Write(salary);
+            ////bw.Write(dept);
+            // fs.Close();
+            // fs = new FileStream("exp.txt", FileMode.Open, FileAccess.Read);
+            // BinaryReader br = new BinaryReader(fs);
+
+            // SqlConnection con = new SqlConnection("data source=.;database=file;integrated security=true;");
+            // SqlCommand cmd = new SqlCommand();
+
+            // cmd.Connection = con;
+            // con.Open();
+            // int res; 
+            // for (int i = 0; i < 2; i++)
+            // {
+            //     cmd.CommandText = "insert into detail values(@name" + i + ",@salary" + i + ",@dept" + i + ")";
+            //     cmd.Parameters.AddWithValue("@name" + i + "", br.ReadString());
+            //     cmd.Parameters.AddWithValue("@salary" + i + "", br.ReadInt32());
+            //     cmd.Parameters.AddWithValue("@dept" + i + "", br.ReadString());
+            //    res = cmd.ExecuteNonQuery();
+            // }
+            // con.Close();
+
+            FileStream fs = new FileStream("darling.txt", FileMode.Append, FileAccess.Write);
+            //StreamWriter sw = new StreamWriter(fs);
+            //Console.WriteLine("enter name");
+            //string name = Console.ReadLine();
+            //Console.WriteLine("enter dept name");
+            //string dept = Console.ReadLine();
+            //Console.WriteLine("enter salary");
+            //int salary = Int32.Parse(Console.ReadLine());
+            //sw.WriteLine(name + " " + dept + " " + salary);
+            //sw.Close();
+            fs.Close();
+            fs = new FileStream("darling.txt", FileMode.Open, FileAccess.Read);
+            StreamReader sr = new StreamReader(fs);
+            string[] arr = File.ReadAllLines("darling.txt");
+            //string[] s=new string[500];
+            //for (int i = 0; i < arr.Length; i++)
+            //{
+            //    s[i] = arr[i].Split(' ');
+            //}
+            //for (int i = 0; i < s.Length; i++)
+            //{
+            //    Console.WriteLine(s[i]);
+            //}
+            string[] t = new string[10];
+          //  int i = 0;
+            List<string> list = new List<string>(arr);
+         //   List<string> llist = new List<string>();
+            foreach (var item in list)
+            {
+                t = item.Split(' ');
+                p.send(t);
+
+            }
+            //foreach (var item in list)
+            //{
+            //    Console.WriteLine(item);
+            ////}
+            //foreach (var item in t)
+            //{
+            //    Console.WriteLine(item);
+            //}
+
+
+        }
+        public void send(string[] t)
+        {
+            SqlConnection con = new SqlConnection("data source=.;database=file;integrated security=true;");
+            SqlCommand cmd = new SqlCommand();
+            string name = t[0];
+            string salary = t[1];
+            string dept = t[2];
+
+
+            Console.WriteLine(name);
+            Console.WriteLine(salary);
+            Console.WriteLine(dept);
+            //cmd.Connection = con;
+            //con.Open();
+            //cmd.CommandText = "insert into detail values(@name,@salary,@dept)";
+            //cmd.Parameters.AddWithValue("@name", name);
+            //cmd.Parameters.AddWithValue("@salary", salary);
+            //cmd.Parameters.AddWithValue("@dept", dept);
+            //cmd.ExecuteNonQuery();
+            //con.Close();
+
+
+            //foreach (var item in t)
+            //{
+            //    Console.WriteLine(item);
+            //}
+        }
+    }
+}​
