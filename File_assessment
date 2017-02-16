@@ -1,0 +1,72 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.IO;
+
+
+namespace CsharpAssessmentB
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+
+            FileStream fs = new FileStream("abc.txt", FileMode.Open, FileAccess.Read);
+            StreamReader sr = new StreamReader(fs);
+
+            while (!sr.EndOfStream)
+            {
+                string s = sr.ReadLine();
+                Console.WriteLine(s);
+            }
+
+
+            Program p = new Program();
+            string[] data = File.ReadAllLines("abc.txt");
+
+            List<string> list = new List<string>(data);
+
+            int len = data.Length;
+
+            string[] t = new string[len];
+
+            foreach (var item in list)
+            {
+                item.Skip(1);
+                    t = item.Split(',');
+                p.AddToDatabase(t);
+
+            }
+        }
+        public void AddToDatabase(string[] t)
+        {
+            //Console.WriteLine("ddfd");
+
+            //For display
+            //int cid, cage;
+            //string cname;
+            foreach (var item in t)
+            {
+                Console.WriteLine(item);
+
+                //cid = item[0];
+                // Console.WriteLine(cid);
+            }
+
+            //int cid = Int16.Parse(t[0]);
+
+            //// Console.WriteLine(cid);
+            //string cname = t[1];
+            //int cage = Int16.Parse(t[2]);
+
+            //DataClasses1DataContext dc = new DataClasses1DataContext();
+
+            //dc.Cuctomers.InsertOnSubmit(new Cuctomer { Id = cid, name = cname, age = cage });
+            //dc.SubmitChanges();
+            //Console.WriteLine("Values inserted to database");
+
+        }
+    }
+}
