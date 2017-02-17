@@ -1,0 +1,136 @@
+----------------------------------------------------TestController
+
+
+namespace MVCFirst.Controllers
+{
+    public class TestController : Controller
+    {
+        //
+        // GET: /Test/
+
+        public ActionResult Index()
+        {
+            return View();
+        }
+        public ActionResult Show()
+        {
+            return View();
+        }
+        public string ShowString()
+        {
+            return "This is a sample string";
+        }
+        public JsonResult ShowJson() //JavaScript Object Notation 1 Key value pair
+        {
+            return new JsonResult { Data="name :rishi",JsonRequestBehavior=JsonRequestBehavior.AllowGet};
+        }
+        //public ViewResult ShowView()
+        //{
+        //    return View();
+        //}
+
+        [HttpGet]
+        public ActionResult ShowView()
+        {
+            //return RedirectToAction("ShowJson");
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Show(int? id=1)
+        {
+            //int id =Request["t1"];
+
+            string s =Request["t1"];
+            int id1 = Int32.Parse(s);
+
+            //ViewData["Key"] = id1;
+
+            ViewBag.val = id1;
+            return Redirect("Message");
+           // return View();
+        }
+
+        public ActionResult Show1()
+        {
+            TempData["k2"]=Request["t1"];
+            return Redirect("/Demo/demo1");
+        }
+        //public ActionResult Show2()
+        //{
+        //    return RedirectToRoute("MyRoute1");
+        //}
+        public ActionResult Show2()
+        {
+            return RedirectToRoute("MyRoute1");
+            //return RedirectToRoutePermanent("ShowJson");
+        }
+        public ContentResult ShowContent()
+        {
+            //return ContentResult{Content="<b>dfdfdfd </b>"};
+          return new  ContentResult{Content="Javascript alert('<b>dfdfdfd </b>');"};
+        }
+
+        //Parameted name of method
+        //public ActionResult ShowMethod(string t1,string t2)
+        //{
+        //    //TempData["name"] = t1;
+        //    TempData["id"] = t1;
+
+        //    TempData["name"] = t2;
+        //    return Redirect("/Demo/demo1");
+        //}
+
+        //Form collection
+        public ActionResult ShowMethod(FormCollection fm)
+        {
+            //TempData["name"] = t1;
+            TempData["id"] = fm["t1"];
+
+            TempData["name"] = fm["t2"];
+            TempData["msg"] = fm["t3"];
+            return Redirect("/Demo/demo1");
+        }
+        public string Message()
+        {
+            return "Good by";
+        }
+    }
+}
+
+
+
+------------------------------------------------------ Demo1
+
+    ViewBag.Title = "demo1";
+}
+
+<h2>demo1 </h2>
+<h3>Thi is demo view</h3>
+<b>Data from templete  : @TempData["k2"]</b>
+
+<h3>Infromation from ShowView</h3>
+<i>Data from page :@TempData["id"]</i><br/>
+<i>Data from page :@TempData["name"]</i><br/>
+<i>Data from page :@TempData["msg"]</i><br/>
+
+
+
+
+---------------------------------------------------Showview 
+
+@{
+    ViewBag.Title = "ShowView";
+}
+
+<h2>ShowView</h2>
+<h3>this is new view data</h3>
+
+<form action="Show" method="post" >
+    <h2>djkhdk </h2>
+    ID:- <input type="text" name="t1" /><br/>
+    Name:- <input type="text" name="t2" /><br />
+    Message:-<input type="text" name="t3" /><br />
+   
+    <input type="submit" value="click" />
+</form>
