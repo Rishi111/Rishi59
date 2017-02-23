@@ -1,2 +1,6 @@
 
 select * from sys.tables          //For Getting all tables from current database in Sql
+
+//Foreign key
+
+constraint [fk_tblStudent]  foreign key(regno) references tblStudent(regno)
