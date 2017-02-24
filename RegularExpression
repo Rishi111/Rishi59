@@ -142,3 +142,16 @@
     </div>
 </body>
 </html>
+
+--------------------------------------Obblur() Method
+   $('#firstname').blur(function () {
+    
+                var firstname = $('#firstname').val();
+                var name_regex = /^[a-zA-Z]+$/;
+                if (firstname.length == 0) {
+                    $('#head').text("* Enter Nmae of emp *"); // This Segment Displays The Validation Rule For All Fields
+                    $("#firstname").focus();
+                    return false;
+                }
+
+            });
