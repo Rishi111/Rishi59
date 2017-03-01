@@ -1,0 +1,10 @@
+
+--------------------Steps--------------------------
+Tools ----->  Nuget Package Manager -----> package Manger Console ----->after that PM> This is will come on console there need to exexute these three line
+
+
+1.Enable-Migrations -contexttypename FlightContext -force
+
+2.add-migration MyMigration
+
+3.update-database
