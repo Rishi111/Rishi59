@@ -1,0 +1,42 @@
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    
+<style> 
+ul { list-style: none;position: relative;top:00px; padding: 0; margin: 0; width: 270px; background-color: #F2C777; } 
+li a { list-style:none; display: block; padding: 15px; text-align: center; color: #7C785B;font-size:15px;font-family:arial; }
+ li a:hover { background-color: #EC8C65; } 
+ li { border-bottom: 1px #D25458 solid; } 
+
+ </style>
+</head>
+<body>
+    <div style="position:absolute;top:0px; width:100%; height:745px; background-color:green">
+        <div style="position:relative; top:0px; width:100%; height:100px; background:#ffffff ">Header</div>
+        <div style="position:relative; top:5px; width:100%;height:600px; background:#ECF0F1 ">
+            <div style="position:relative; top:5px; width:20%;height:590px; background:#F2C777 ">
+                 <div>
+ <ul>
+ <li><a href="">Home</a></li>
+ <li><a href="">Products</a></li>
+ <li><a href="">Services</a></li>
+ <li><a href="">Shop</a></li> 
+ <li><a href="">Contact</a></li> 
+  <li><a href="">djdsfkjdfkl</a></li> 
+</ul> </div> 
+            </div>
+             @RenderBody()
+        </div>
+         <div style="position:relative; top:5px;bottom: 0px; width:100%; height:40px; background:#F2C777 ">Footer</div>
+    </div>
+   
+
+    @Scripts.Render("~/bundles/jquery")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
