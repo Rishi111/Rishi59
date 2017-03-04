@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <style> 
+    ul
+     { 
+        list-style: none;
+       
+        top:0px;
+        padding: 0;
+        margin: 0;
+        width: 298px; 
+        background-color: #F2C777; 
+
+    } 
+    li a 
+    {
+         list-style:none;
+          display: block; 
+          padding: 15px; 
+          text-align: center; 
+          color: #7C785B;
+          font-size:15px;
+          font-family:arial; 
+
+    }
+    li a:hover 
+    { background-color: #EC8C65; } 
+ li
+  { border-bottom: 1px #D25458 solid; } 
+
+ </style>
+</head>
+<body>
+    <div style="position:relative;top:0px; width:100%; height:100px; background-color:#F2C777;text-align:center; font-size:20px;font-family:Arial"><br /><br />Adverstisment System</div>
+    <div style="position:relative;top:5px; width:100%; height:500px;">
+    <div style="position:relative;top:5px; width:300px; height:490px;background-color:#F2C777;text-align:center;">
+               
+                 <ul>
+                            <li><a href="#">Home</a></li>
+                            <li><a href="#">Products</a></li>
+                            <li><a href="#">Services</a></li>
+                            <li><a href="#">Shop</a></li> 
+                            <li><a href="#">Contact</a></li> 
+                            <li><a href="#">djdsfkjdfkl</a></li> 
+                </ul> 
+               
+         <div style="position:absolute;left:320px;top:5px; height:40px;  width: 800px; text-align:center; "> @RenderBody()</div>   
+    </div>
+    </div>
+     <div style="position:relative;top:10px; bottom:0px; width:100%; height:40px;text-align :center;background-color:#F2C777">Footer</div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
