@@ -1,0 +1,17 @@
+
+
+-----------------Combobox binding-------------------
+
+ <ComboBox Name="genre" Text="{Binding Genre}" HorizontalAlignment="Left" Margin="264,28,0,0" VerticalAlignment="Top" Width="161" Height="33" SelectionChanged="ComboBox_SelectionChanged">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <ComboBoxItem Content="{Binding Genre}"></ComboBoxItem>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        
+ inside combobox Binding      
+ --------------------------
+        
+          Book b = genre.SelectedItem as Book;
+            grid1.ItemsSource = db.Books.Where(m=>m.Genre==b.Genre);
